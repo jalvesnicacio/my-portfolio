@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo-portfolio
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+
+  server:
+    build: ./server
+    container_name: api-portfolio
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGO_URI=mongodb://admin:admin123@mongo:27017/?authSource=admin
+    depends_on:
+      - mongo
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  client:
+    build: ./client
+    container_name: react-portfolio
+    ports:
+      - "3000:5173"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - HOST=0.0.0.0
+
+volumes:
+  mongo-data:

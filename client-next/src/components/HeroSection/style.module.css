@@ -1,0 +1,7 @@
+.highlight {
+  background-image: linear-gradient(to bottom, #ffc8c8 50%, transparent 40%);
+  background-repeat: no-repeat;
+  background-size: 100% 0.6em; /* altura do fundo, ajusta conforme o tamanho da fonte */
+  background-position: bottom; /* coloca atrás do texto */
+  padding: 2px 3px;
+}

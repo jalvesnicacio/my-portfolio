@@ -5,7 +5,10 @@ import { Download, FolderGit2 } from "lucide-react";
 
 export default function AboutSection() {
   return (
-    <section className="py-10 px-50 flex items-center justify-center">
+    <section
+      className="py-10 px-50 flex items-center justify-center"
+      id="about"
+    >
       <div className="px-10 py-10 bg-white border-[#f5f7fa] border-1 rounded-sm shadow-md flex flex-col md:flex-row items-center gap-10">
         {/* Imagem */}
         <Image

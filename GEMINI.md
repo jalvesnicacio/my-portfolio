@@ -1,0 +1,2 @@
+## Gemini Added Memories
+- The user's project is a monorepo-like structure with four main directories at the root: 'Client' (React SPA for admin/data registration), 'Client-next' (Next.js public portfolio app), 'Server' (Node.js API), and 'Design' (graphic design files).

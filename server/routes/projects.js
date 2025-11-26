@@ -56,6 +56,16 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Listar só os publicados
+router.get('/published', async (req, res) => {
+    try {
+        const publishedProjects = await Project.find({ publish: true });
+        res.json(publishedProjects);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching published projects' });
+    }
+});
+
 // Listar projeto por ID
 router.get('/:id', async (req, res) => {
     try {
@@ -67,16 +77,6 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
         console.error('Error fetching project:', error);
         res.status(500).json({ message: 'Error fetching project' });
-    }
-});
-
-// Listar só os publicados
-router.get('/published', async (req, res) => {
-    try {
-        const publishedProjects = await Project.find({ publish: true });
-        res.json(publishedProjects);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching published projects' });
     }
 });
 

@@ -1,25 +1,12 @@
 import Image from "next/image";
-
-async function getProject(id: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  const res = await fetch(`${baseUrl}/projects/${id}`, {
-    cache: "no-store"
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch project");
-  }
-
-  return res.json();
-}
+import { getProject } from "@/actions/projects";
 
 interface ProjectPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { id } = params;
+  const { id } = await params;
   const project = await getProject(id);
 
   return (
@@ -66,9 +53,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <a
           href={project.projectUrl}
           target="_blank"
-          className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
+          className="inline-block px-6 py-3 bg-purple-600 hover:bg-purple-800 text-white rounded-lg font-semibold transition"
         >
-          Visit Project →
+          Visit Live Project →
         </a>
       )}
     </div>

@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Project, fetchPublishedProjects } from "@/actions/projects";
+import { useRouter } from "next/navigation";
 
 export default function PortfolioSection() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -76,11 +78,14 @@ export default function PortfolioSection() {
               </h4>
 
               <p className="text-gray-600 text-sm leading-relaxed">
-                {project.description}
+                {project._id} - {project.description}
               </p>
 
               {/* Botão */}
-              <button className="mt-6 inline-flex items-center gap-2 text-purple-600 font-medium border border-purple-400 rounded-xl px-4 py-2 hover:bg-purple-50 transition">
+              <button
+                className="mt-6 inline-flex items-center gap-2 text-purple-600 font-medium border border-purple-400 rounded-xl px-4 py-2 hover:bg-purple-50 transition"
+                onClick={() => router.push(`/project/${project._id}`)}
+              >
                 Case Study
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -104,3 +109,4 @@ export default function PortfolioSection() {
     </section>
   );
 }
+

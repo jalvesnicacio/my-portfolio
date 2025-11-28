@@ -9,13 +9,16 @@ export interface Project {
   publish: boolean;
 }
 
+const baseApiUrl =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+
 /**
  * Busca os projetos publicados na API.
  * Lança um erro caso a requisição falhe.
  */
 export async function fetchPublishedProjects(): Promise<Project[]> {
   try {
-    const res = await fetch("http://localhost:5001/api/projects", {
+    const res = await fetch(`${baseApiUrl}/projects`, {
       next: { revalidate: 60 } // opcional: revalidação automática no Next
     });
 
@@ -29,4 +32,16 @@ export async function fetchPublishedProjects(): Promise<Project[]> {
     console.error("Erro ao buscar os projetos:", error);
     throw error;
   }
+}
+
+export async function getProject(id: string) {
+  const res = await fetch(`${baseApiUrl}/projects/${id}`, {
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch project");
+  }
+
+  return res.json();
 }

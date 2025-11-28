@@ -5,7 +5,7 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
+  navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -14,10 +14,12 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import React from "react";
 
+const BaseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3001";
+
 const navigationMenuItems = [
-  { title: "Home", href: "#", icon: Home },
-  { title: "About", href: "#about", icon: Info },
-  { title: "Portfolio", href: "#portfolio", icon: Briefcase },
+  { title: "Home", href: BaseUrl, icon: Home },
+  { title: "About", href: `${BaseUrl}/#about`, icon: Info },
+  { title: "Portfolio", href: `${BaseUrl}/#portfolio`, icon: Briefcase }
 ];
 
 export default function Header() {
@@ -25,7 +27,7 @@ export default function Header() {
 
   const handleMobileLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string,
+    href: string
   ) => {
     e.preventDefault();
     setIsSheetOpen(false);
@@ -82,7 +84,7 @@ export default function Header() {
           </NavigationMenu>
           {/* Contact como botão */}
           <Button asChild>
-            <Link href="#contact">Contact</Link>
+            <Link href={`${BaseUrl}/#contact`}>Contact</Link>
           </Button>
         </div>
 
@@ -109,7 +111,7 @@ export default function Header() {
                 ))}
                 <Button asChild className="mt-4 w-full">
                   <a
-                    href="#contact"
+                    href={`${BaseUrl}/#contact`}
                     onClick={(e) => handleMobileLinkClick(e, "#contact")}
                   >
                     Contact

@@ -50,20 +50,6 @@ export default function PortfolioSection() {
       </h3>
 
       <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {/* {projects.map((project) => (
-          <div
-            key={project._id}
-            className="border p-4 rounded-lg shadow-lg bg-white max-w-md"
-          >
-            <img
-              src={project.imageUrl}
-              alt={project.title}
-              className="w-full h-48 object-cover rounded-md mb-3"
-            />
-            <h4 className="font-bold text-lg">{project.title}</h4>
-            <p>{project.description}</p>
-          </div>
-        ))} */}
         {projects.map((project) => (
           <div
             key={project._id}

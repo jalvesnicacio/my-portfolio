@@ -6,20 +6,22 @@ import { Download, FolderGit2 } from "lucide-react";
 export default function AboutSection() {
   return (
     <section
-      className="py-10 px-50 flex items-center justify-center"
+      className="py-10 px-4 sm:px-8 flex items-center justify-center"
       id="about"
     >
-      <div className="px-10 py-10 bg-white border-[#f5f7fa] border-1 rounded-sm shadow-md flex flex-col md:flex-row items-center gap-10">
+      <div className="px-4 md:px-10 py-10 bg-white border-[#f5f7fa] border rounded-sm shadow-md flex flex-col md:flex-row items-center gap-10">
         {/* Imagem */}
-        <Image
-          src="/about-jalves.png"
-          alt="About Me"
-          width={768}
-          height={868}
-          className="mx-auto mb-6"
-        />
+        <div className="w-full md:w-1/2">
+          <Image
+            src="/about-jalves.png"
+            alt="About Me"
+            width={768}
+            height={868}
+            className="mx-auto mb-6 w-full h-auto rounded-lg"
+          />
+        </div>
         {/* Texto */}
-        <div className="container px-6 text-left">
+        <div className="w-full md:w-1/2 container px-6 text-left">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Full Stack Web Developer & Accessibility Specialist
           </h2>
@@ -32,9 +34,9 @@ export default function AboutSection() {
             My passion is to create experiences that connect people and make
             technology more human.
           </p>
-          <div>
+          <div className="flex items-center">
             <Button asChild>
-              <a href="#projects">
+              <a href="#portfolio">
                 <FolderGit2 />
                 My Projects
               </a>

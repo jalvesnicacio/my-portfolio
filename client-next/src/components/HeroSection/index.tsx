@@ -5,8 +5,8 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className=" py-10 px-50 flex items-start justify-center-safe">
-      <div className=" px-6 text-left">
+    <section className="py-10 px-4 sm:px-8 md:px-16 flex flex-col md:flex-row items-center justify-center gap-8">
+      <div className="px-2 md:px-6 text-left">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Hello, I'm <br /> Jalves Nicacio
         </h1>

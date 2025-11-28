@@ -52,7 +52,7 @@ export default function ContactSection() {
 
   return (
     <section
-      className="relative z-20 py-10 px-10 flex flex-col md:flex-row items-center justify-between border shadow-lg rounded-2xl max-w-5xl m-auto bg-gray-50 gap-8"
+      className="relative z-20 py-10 px-4 sm:px-8 flex flex-col md:flex-row items-center justify-between border shadow-lg rounded-2xl max-w-5xl m-auto bg-gray-50 gap-8"
       id="contact"
     >
       {/* Coluna esquerda */}
@@ -68,13 +68,13 @@ export default function ContactSection() {
         <div className="flex flex-col justify-center gap-3">
           {/* Card 1 */}
           <Card className="bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <CardContent className="flex items-center gap-3 px-5 py-4">
-              <span className="flex items-center justify-center w-8 h-8 bg-[#A53DFF] rounded">
+            <CardContent className="flex items-center gap-3 px-5 py-4 w-full">
+              <span className="flex items-center justify-center w-8 h-8 bg-[#A53DFF] rounded flex-shrink-0">
                 <MapPin className="text-white w-4 h-4" />
               </span>
-              <div>
+              <div className="flex-grow w-full">
                 <p className="text-sm text-gray-500">My Email:</p>
-                <p className="text-base font-medium text-gray-900">
+                <p className="text-base font-medium text-gray-900 break-words">
                   jalves.nicacio@gmail.com
                 </p>
               </div>
@@ -83,11 +83,11 @@ export default function ContactSection() {
 
           {/* Card 2 */}
           <Card className="bg-white hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-            <CardContent className="flex items-center gap-3 px-5 py-4">
-              <span className="flex items-center justify-center w-8 h-8 bg-[#A53DFF] rounded">
+            <CardContent className="flex items-center gap-3 px-5 py-4 w-full">
+              <span className="flex items-center justify-center w-8 h-8 bg-[#A53DFF] rounded flex-shrink-0">
                 <MapPin className="text-white w-4 h-4" />
               </span>
-              <div>
+              <div className="flex-grow w-full">
                 <p className="text-sm text-gray-500">Location:</p>
                 <p className="text-base font-medium text-gray-900">
                   Maceió, Brazil

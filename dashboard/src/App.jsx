@@ -2,10 +2,8 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
+  Navigate
 } from "react-router-dom";
-import ProjectShowcase from "./components/ProjectShowcase";
-import ProjectDetails from "./components/ProjectDetails";
 import AdminPanel from "./components/AdminPanel";
 import Login from "./pages/Login";
 import { useState } from "react";
@@ -19,16 +17,17 @@ function App() {
 
   return (
     <Router>
-      <Header
-        isAuthenticated={isAuthenticated}
-        setIsAuthenticated={setIsAuthenticated}
-      />
+      {/* Só mostra o Header se o usuário estiver autenticado */}
+      {isAuthenticated && (
+        <Header
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+        />
+      )}
       <main className="px-0 bg-gray-50 pb-6">
         <Routes>
-          <Route path="/" element={<ProjectShowcase />} />
-          <Route path="/projects/:id" element={<ProjectDetails />} />
           <Route
-            path="/admin"
+            path="/"
             element={
               isAuthenticated ? (
                 <AdminPanel />

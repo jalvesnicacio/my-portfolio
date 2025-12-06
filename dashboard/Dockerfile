@@ -2,7 +2,7 @@
 FROM node:18
 
 # Define o diretório de trabalho no container
-WORKDIR /app
+WORKDIR /src
 
 # Copia os arquivos de dependência primeiro (aproveita cache do Docker)
 COPY package*.json ./

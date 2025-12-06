@@ -30,8 +30,8 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
           scrolled ? "bg-white text-[#2B2B2A]" : "bg-[#2B2B2A] text-white"
         }`}
       >
-        <h1 className="text-2x1 font-bold text-gray-800 pt-2">
-          <img src={logo} alt="Jalves Nicacio" className="h-10" />
+        <h1 className="text-2x1 font-bold text-gray-800 pt-2 text-white">
+          My Portfolio - Admin panel
         </h1>
         <nav className="flex items-center scape-x-6">
           <Link
@@ -40,12 +40,12 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
           >
             Home
           </Link>
-          <Link
+          {/* <Link
             to="/admin"
             className="text-white montserrat-bold hover:underline mx-2"
           >
             Admin
-          </Link>
+          </Link> */}
           {isAuthenticated ? (
             <button
               onClick={handleLogout}
@@ -64,7 +64,7 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
         </nav>
       </header>
 
-      <div className="z-5 w-full flex bg-white mt-14 bg-cover bg-center">
+      {/* <div className="z-5 w-full flex bg-white mt-14 bg-cover bg-center">
         <div className="hero-text flex flex-col w-4/5 justify-center items-center mr-10">
           <div className="flex flex-col items-start">
             <span className="reddit-sans-condensed-bold text-[30px]">
@@ -82,7 +82,7 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
         <div className="w-1/5 text-white">
           <img src={hero} alt="Jalves Nicacio" className="w-180 h-auto" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

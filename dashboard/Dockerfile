@@ -2,18 +2,18 @@
 FROM node:18
 
 # Define o diretório de trabalho no container
-WORKDIR /src
+WORKDIR /app
 
 # Copia os arquivos de dependência primeiro (aproveita cache do Docker)
 COPY package*.json ./
 
-# Instala as dependências do React
+# Instala as dependências
 RUN npm install
 
 # Copia o restante do projeto
 COPY . .
 
-# Expõe a porta 3000 (usada pelo React)
+# Expõe a porta do Vite
 EXPOSE 5173
 
 # Comando para iniciar o app

@@ -16,7 +16,10 @@ export default function Login({ setIsAuthenticated }) {
       setIsAuthenticated(true);
       navigate("/");
     } catch (err) {
-      alert("Invalid login credentials");
+      console.log(
+        "Invalid login credentials: " +
+          (err.response?.data?.message || "unknown error")
+      );
     }
   };
 
@@ -80,7 +83,7 @@ export default function Login({ setIsAuthenticated }) {
             className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold 
               hover:bg-blue-700 transition"
           >
-            Entrar
+            Entrar no Dashboard
           </button>
         </form>
 

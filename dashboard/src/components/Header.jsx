@@ -1,21 +1,8 @@
 // components/Header.jsx
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import logo from "../assets/img/jalvesnicacio_logo2.png";
-import hero from "../assets/img/header_hero.png";
 
-function Header({ isAuthenticated, setIsAuthenticated }) {
+export default function Header({ isAuthenticated, setIsAuthenticated }) {
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => {
-      console.log("scrollY:", window.scrollY);
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scoll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -24,67 +11,30 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
   };
 
   return (
-    <div className="flex flex-col">
-      <header
-        className={`flex h-14 itens-center justify-between px-6 fixed top-0 left-0 w-full shadow z-10 trasition-colors duration-300 ${
-          scrolled ? "bg-white text-[#2B2B2A]" : "bg-[#2B2B2A] text-white"
-        }`}
-      >
-        <h1 className="text-2x1 font-bold text-gray-800 pt-2 text-white">
-          My Portfolio - Admin panel
-        </h1>
-        <nav className="flex items-center scape-x-6">
-          <Link
-            to="/"
-            className="text-white montserrat-bold hover:underline mx-2"
-          >
-            Home
-          </Link>
-          {/* <Link
-            to="/admin"
-            className="text-white montserrat-bold hover:underline mx-2"
-          >
-            Admin
-          </Link> */}
-          {isAuthenticated ? (
-            <button
-              onClick={handleLogout}
-              className="text-white montserrat-bold hover:underline"
-            >
-              Logout
-            </button>
-          ) : (
-            <Link
-              to="/login"
-              className="text-white montserrat-bold hover:underline"
-            >
-              Login
-            </Link>
-          )}
-        </nav>
-      </header>
+    <aside className="fixed left-0 top-0 h-full w-64 bg-[#1F1F1F] text-white flex flex-col shadow-lg">
+      {/* Logo / título */}
+      <div className="h-16 flex items-center px-6 border-b border-gray-800">
+        <h1 className="text-lg font-bold">My Portfolio</h1>
+      </div>
 
-      {/* <div className="z-5 w-full flex bg-white mt-14 bg-cover bg-center">
-        <div className="hero-text flex flex-col w-4/5 justify-center items-center mr-10">
-          <div className="flex flex-col items-start">
-            <span className="reddit-sans-condensed-bold text-[30px]">
-              Hi, I am
-            </span>
-            <span className="reddit-sans-condensed-bold text-[70px]">
-              Jalves Nicacio
-            </span>
-            <span className="hero-description trebuchet-bold text-[20px]">
-              Full stack developer / WCAG specialist
-            </span>
-          </div>
-        </div>
+      {/* Menu */}
+      <nav className="flex-1 flex flex-col px-4 py-6 space-y-2">
+        <Link to="/" className="px-4 py-2 rounded hover:bg-gray-800 transition">
+          Home
+        </Link>
+      </nav>
 
-        <div className="w-1/5 text-white">
-          <img src={hero} alt="Jalves Nicacio" className="w-180 h-auto" />
-        </div>
-      </div> */}
-    </div>
+      {/* Footer - Logout */}
+      <div className="px-4 py-4 border-t border-gray-800">
+        {isAuthenticated && (
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-2 rounded bg-red-600 hover:bg-red-700 transition"
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    </aside>
   );
 }
-
-export default Header;

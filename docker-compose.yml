@@ -24,12 +24,13 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+    restart: unless-stopped
 
-  client:
+  dashboard:
     build: ./dashboard
     container_name: react-portfolio
     ports:
-      - "3000:5173"
+      - "5173:5173"
     stdin_open: true
     tty: true
     depends_on:
@@ -39,6 +40,7 @@ services:
       - /app/node_modules
     environment:
       - HOST=0.0.0.0
+    restart: unless-stopped
 
 volumes:
   mongo-data:

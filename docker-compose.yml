@@ -43,5 +43,20 @@ services:
       - HOST=0.0.0.0
     restart: unless-stopped
 
+  client-next:
+    build: ./client-next
+    container_name: next-portfolio
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    volumes:
+      - ./client-next:/app
+      - /app/node_modules
+    environment:
+      - HOST=0.0.0.0
+      - NEXT_PUBLIC_API_URL=http://localhost:5001
+    restart: unless-stopped
+
 volumes:
   mongo-data:

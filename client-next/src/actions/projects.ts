@@ -9,8 +9,10 @@ export interface Project {
   publish: boolean;
 }
 
-const baseApiUrl =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+// const baseApiUrl =
+//   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001";
 
 /**
  * Busca os projetos publicados na API.
@@ -18,7 +20,7 @@ const baseApiUrl =
  */
 export async function fetchPublishedProjects(): Promise<Project[]> {
   try {
-    const res = await fetch(`${baseApiUrl}/projects`, {
+    const res = await fetch(`${API_BASE}/api/projects`, {
       next: { revalidate: 60 } // opcional: revalidação automática no Next
     });
 
@@ -35,7 +37,7 @@ export async function fetchPublishedProjects(): Promise<Project[]> {
 }
 
 export async function getProject(id: string) {
-  const res = await fetch(`${baseApiUrl}/projects/${id}`, {
+  const res = await fetch(`${API_BASE}/api/projects/${id}`, {
     cache: "no-store"
   });
 

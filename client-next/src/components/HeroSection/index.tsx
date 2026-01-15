@@ -12,9 +12,9 @@ export default function HeroSection() {
         </h1>
         <p className="text-lg md:text-lg mb-8 max-w-2xl">
           I'm a{" "}
-          <span className={styles.highlight}>Full Stack Web Developer</span>{" "}
+          <span className={styles.highlight}>Full Stack Software Engineer</span>{" "}
           with
-          <span className={styles.highlight}>15+ years</span> of experience,
+          <span className={styles.highlight}>20+ years</span> of experience,
           based in Maceió, Brazil. My specialty is front-end development and
           WCAG accessibility, striving to build immersive and beautiful web
           applications through carefully crafted code and user-centric design.

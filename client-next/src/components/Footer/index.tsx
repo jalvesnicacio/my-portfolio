@@ -39,7 +39,7 @@ export default function Footer() {
 
         {/* Direita */}
         <div className="text-sm text-gray-400 mt-6 md:mt-0">
-          Copyright © 2025 Jalves Nicacio
+          Copyright © 2026 Jalves Nicacio
         </div>
       </div>
     </footer>

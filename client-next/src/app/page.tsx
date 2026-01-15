@@ -6,16 +6,17 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="px-10">
-      <HeroSection />
+    <>
+      <main className="px-10">
+        <HeroSection />
 
-      <AboutSection />
+        <AboutSection />
 
-      <PortfolioSection />
+        <PortfolioSection />
 
-      <ContactSection />
-
+        <ContactSection />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }

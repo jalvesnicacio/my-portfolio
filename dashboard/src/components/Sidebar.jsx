@@ -37,6 +37,7 @@ export default function Sidebar({ isAuthenticated, setIsAuthenticated }) {
 
         <NavLink
           to="/projects"
+          end
           className={({ isActive }) =>
             `${linkClass} ${isActive ? activeClass : baseClass}`
           }

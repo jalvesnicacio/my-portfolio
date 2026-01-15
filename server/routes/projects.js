@@ -3,6 +3,9 @@ import Project from '../models/Project.js';
 import authenticateToken from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
+import { removeMediaFiles } from "../utils/removeMediaFiles.js";
+
+
 
 const router = express.Router();
 
@@ -17,12 +20,37 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+            'image/gif',
+            'video/mp4',
+            'video/webm',
+            'video/ogg'
+        ];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Unsupported media type'), false);
+        }
+    }
+});
 
 // Criar novo projeto
 router.post('/', authenticateToken, async (req, res) => {
     try {
-        const { title, summary, description, technologies, imageUrl, projectUrl, publish } = req.body;
+        const {
+            title,
+            summary,
+            description,
+            technologies,
+            projectUrl,
+            publish,
+            media = [] } = req.body;
 
         if (!title || !description) {
             return res.status(400).json({ message: 'Title and description are required' });
@@ -33,9 +61,9 @@ router.post('/', authenticateToken, async (req, res) => {
             summary,
             description,
             technologies,
-            imageUrl,
             projectUrl,
             publish,
+            media
         });
 
         const savedProject = await newProject.save();
@@ -81,38 +109,87 @@ router.get('/:id', async (req, res) => {
 });
 
 // Upload de imagem
-router.post('/upload', authenticateToken, upload.single('file'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
+router.post('/upload', authenticateToken, upload.array('files', 10), (req, res) => {
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ message: 'No files uploaded' });
     }
-    // const imageUrl = `/uploads/${req.file.filename}`;
-    const baseUrl = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5001}`;
-    const imageUrl = `${baseUrl}/uploads/${req.file.filename}`;
-    res.status(201).json({ imageUrl });
+
+    const baseUrl =
+        process.env.BASE_URL || `http://localhost:${process.env.PORT || 5001}`;
+
+    const media = req.files.map(file => {
+        const isVideo = file.mimetype.startsWith('video/');
+        return {
+            url: `${baseUrl}/uploads/${file.filename}`,
+            type: isVideo ? 'video' : 'image',
+            alt: ''
+        };
+    });
+
+    res.status(201).json({ media });
 });
 
 // Atualizar projeto
-router.put('/:id', authenticateToken, async (req, res) => {
-    try {
-        const updatedProject = await Project.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            { new: true }
-        );
-        res.json(updatedProject);
-    } catch (error) {
-        console.error('Error updating project:', error);
-        res.status(500).json({ message: 'Error updating project' });
-    }
-});
-// DELETE /api/projects/:id
-router.delete("/:id", async (req, res) => {
-    try {
-        const deletedProject = await Project.findByIdAndDelete(req.params.id);
+// router.put('/:id', authenticateToken, async (req, res) => {
+//     try {
+//         const updatedProject = await Project.findByIdAndUpdate(
+//             req.params.id,
+//             req.body,
+//             { new: true }
+//         );
+//         res.json(updatedProject);
+//     } catch (error) {
+//         console.error('Error updating project:', error);
+//         res.status(500).json({ message: 'Error updating project' });
+//     }
+// });
 
-        if (!deletedProject) {
+// Atualizar projeto
+router.put("/:id", authenticateToken, async (req, res) => {
+    try {
+        const incomingMedia = req.body.media || [];
+        const project = await Project.findById(req.params.id);
+
+        if (!project) {
             return res.status(404).json({ message: "Project not found" });
         }
+
+        // 🔍 Detecta mídias removidas
+        const oldUrls = project.media.map(m => m.url);
+        const newUrls = incomingMedia.map(m => m.url);
+
+        const removedMedia = project.media.filter(
+            m => !newUrls.includes(m.url)
+        );
+
+        // 🧹 Remove arquivos físicos
+        removeMediaFiles(removedMedia);
+
+        // 🔄 Atualiza projeto
+        project.set(req.body);
+        await project.save();
+
+        res.json(project);
+    } catch (error) {
+        console.error("Error updating project:", error);
+        res.status(500).json({ message: "Error updating project" });
+    }
+});
+
+// DELETE /api/projects/:id
+router.delete("/:id", authenticateToken, async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id);
+
+        if (!project) {
+            return res.status(404).json({ message: "Project not found" });
+        }
+
+        // 🧹 Remove arquivos físicos das mídias
+        removeMediaFiles(project.media);
+
+        // 🗑️ Remove o projeto do banco
+        await project.deleteOne();
 
         res.json({ message: "Project deleted successfully" });
     } catch (err) {

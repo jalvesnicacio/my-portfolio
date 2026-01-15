@@ -1,31 +1,37 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import InputGroup from "./InputGroup";
+import MediaInput from "./MediaInput";
 import TextAreaGroup from "./TextAreaGroup";
 import CheckboxGroup from "./CheckboxGroup";
 
 const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
   const isEditing = !!selectedProject;
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [existingMedia, setExistingMedia] = useState([]);
+  const [newMediaAlt, setNewMediaAlt] = useState({});
   const [form, setForm] = useState({
     title: "",
     summary: "",
     description: "",
-    imageUrl: "",
     projectUrl: "",
     technologies: "",
-    publish: false,
+    publish: false
   });
 
-  // const [form, setForm] = useState({ ... });
-
   useEffect(() => {
-    if (selectedProject) {
-      setForm({
-        ...selectedProject,
-        technologies: selectedProject.technologies.join(", "),
-      });
-    }
+    if (!selectedProject) return;
+
+    setForm({
+      title: selectedProject.title || "",
+      summary: selectedProject.summary || "",
+      description: selectedProject.description || "",
+      projectUrl: selectedProject.projectUrl || "",
+      technologies: selectedProject.technologies?.join(", ") || "",
+      publish: selectedProject.publish || false
+    });
+
+    setExistingMedia(selectedProject.media || []);
   }, [selectedProject]);
 
   const handleChange = (e) => {
@@ -34,64 +40,138 @@ const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
   };
 
   const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const newFiles = Array.from(e.target.files);
+
+    setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+
+    // limpa o input para permitir selecionar o mesmo arquivo novamente, se quiser
+    e.target.value = null;
+  };
+
+  const removeSelectedFile = (index) => {
+    setSelectedFiles((prevFiles) => prevFiles.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let imageUrl = form.imageUrl; // Use the existing imageUrl if provided
-    if (selectedFile) {
+
+    let media = [...existingMedia];
+
+    // Upload de novos arquivos (se houver)
+    if (selectedFiles.length > 0) {
       const formData = new FormData();
-      formData.append("file", selectedFile);
-      console.log("Form data:", form);
+      selectedFiles.forEach((file) => {
+        formData.append("files", file);
+      });
+
       try {
         const uploadRes = await api.post("/api/projects/upload", formData, {
           headers: {
-            "Content-Type": "multipart/form-data",
-          },
+            "Content-Type": "multipart/form-data"
+          }
         });
-        imageUrl = uploadRes.data.imageUrl;
+
+        // Espera-se que o backend retorne { media: [...] }
+        const uploadedWithAlt = uploadRes.data.media.map((m, index) => ({
+          ...m,
+          alt: newMediaAlt[index] || ""
+        }));
+        media = [...media, ...uploadedWithAlt];
       } catch (error) {
-        console.error("Error uploading file:", error);
-        alert("Error uploading file: " + error.message);
+        console.error("Error uploading files:", error);
+        alert("Error uploading files");
         return;
       }
     }
 
-    // Monta o payload com a imageUrl para envio:
     const payload = {
-      ...form,
-      imageUrl,
-      technologies: form.technologies.split(",").map((t) => t.trim()),
+      title: form.title,
+      summary: form.summary,
+      description: form.description,
+      projectUrl: form.projectUrl,
+      publish: form.publish,
+      technologies: form.technologies
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean),
+      media
     };
 
-    // Se o projeto já existe, atualiza-o
     try {
-      let res;
       if (isEditing) {
-        res = await api.put(`/api/projects/${selectedProject._id}`, payload);
+        await api.put(`/api/projects/${selectedProject._id}`, payload);
       } else {
-        res = await api.post("/api/projects", payload);
+        await api.post("/api/projects", payload);
       }
-      onProjectAdded(res.data);
-      // Reset the form after submission
+
+      alert("Project saved successfully");
+      onProjectAdded?.();
+
+      // Reset
       setForm({
         title: "",
         summary: "",
         description: "",
-        technologies: "",
-        imageUrl: "",
         projectUrl: "",
-        publish: false,
+        technologies: "",
+        publish: false
       });
-      setSelectedFile(null);
-      if (onCancelEdit) onCancelEdit();
-      alert("Project saved successfully");
+      setSelectedFiles([]);
+      setExistingMedia([]);
+      setNewMediaAlt({});
+      onCancelEdit?.();
     } catch (error) {
-      console.error("Error updating project:", error);
-      alert("Error updating project: " + error.message);
+      console.error("Error saving project:", error);
+      alert("Error saving project");
     }
   };
+
+  const renderMediaPreview = (mediaList, removable = false) => (
+    <div className="flex flex-wrap gap-4 mt-4">
+      {mediaList.map((m, index) => (
+        <div key={index} className="relative w-32">
+          {m.tipo === "video" ? (
+            <video
+              src={m.url}
+              controls
+              className="w-32 h-24 object-cover rounded"
+            />
+          ) : (
+            <img
+              src={m.url}
+              alt={m.alt || ""}
+              className="w-32 h-24 object-cover rounded"
+            />
+          )}
+          <input
+            type="text"
+            placeholder="Alt text (accessibility)"
+            value={m.alt || ""}
+            onChange={(e) => {
+              const updated = [...existingMedia];
+              updated[index] = {
+                ...updated[index],
+                alt: e.target.value
+              };
+              setExistingMedia(updated);
+            }}
+            className="mt-1 w-full text-xs border rounded px-1 py-0.5"
+          />
+          {removable && (
+            <button
+              type="button"
+              onClick={() =>
+                setExistingMedia(existingMedia.filter((_, i) => i !== index))
+              }
+              className="absolute top-1 right-1 bg-red-600 text-white text-xs px-1 rounded"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <form
@@ -127,20 +207,69 @@ const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
       />
 
       <InputGroup
-        label="Image"
-        name="imageFile"
-        type="file"
-        onChange={handleFileChange}
-        required={false}
-      />
-
-      <InputGroup
         label="Project URL"
         name="projectUrl"
         value={form.projectUrl}
         onChange={handleChange}
         required={false}
       />
+
+      <MediaInput
+        label="Media (images or videos)"
+        onChange={handleFileChange}
+        filesCount={selectedFiles.length}
+      />
+
+      {existingMedia.length > 0 && (
+        <div className="mb-3">
+          <p className="text-sm font-medium mt-4">Existing media</p>
+          {renderMediaPreview(existingMedia, true)}
+        </div>
+      )}
+
+      {selectedFiles.length > 0 && (
+        <div className="mb-3">
+          <p className="text-sm font-medium mt-4">New media (preview)</p>
+          <div className="flex flex-wrap gap-4 mt-2">
+            {selectedFiles.map((file, index) => (
+              <div key={index} className="relative w-32">
+                {file.type.startsWith("video") ? (
+                  <video
+                    src={URL.createObjectURL(file)}
+                    className="w-32 h-24 object-cover rounded"
+                  />
+                ) : (
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={file.name}
+                    className="w-32 h-24 object-cover rounded"
+                  />
+                )}
+                <input
+                  type="text"
+                  placeholder="Alt text (accessibility)"
+                  value={newMediaAlt[index] || ""}
+                  onChange={(e) =>
+                    setNewMediaAlt((prev) => ({
+                      ...prev,
+                      [index]: e.target.value
+                    }))
+                  }
+                  className="mt-1 w-full text-xs border rounded px-1 py-0.5"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeSelectedFile(index)}
+                  className="absolute top-1 right-1 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded hover:bg-red-700"
+                  title="Remove file"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <CheckboxGroup
         label="Published?"

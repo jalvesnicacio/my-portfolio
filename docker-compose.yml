@@ -23,6 +23,7 @@ services:
       - mongo
     volumes:
       - ./server:/app
+      - ./server/uploads:/app/uploads
       - /app/node_modules
     restart: unless-stopped
 

@@ -4,13 +4,11 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
-import AdminPanel from "./components/AdminPanel";
 import Login from "./pages/Login";
 import Projects from "./pages/Projects";
 import NewProject from "./pages/NewProject";
 import EditProject from "./pages/EditProject";
 import { useState } from "react";
-import Header from "./components/Header";
 import "./App.css";
 import Sidebar from "./components/Sidebar";
 
@@ -21,13 +19,6 @@ function App() {
 
   return (
     <Router>
-      {/* Só mostra o Header se o usuário estiver autenticado */}
-      {/* {isAuthenticated && (
-        <Header
-          isAuthenticated={isAuthenticated}
-          setIsAuthenticated={setIsAuthenticated}
-        />
-      )} */}
       {isAuthenticated && (
         <Sidebar
           isAuthenticated={isAuthenticated}

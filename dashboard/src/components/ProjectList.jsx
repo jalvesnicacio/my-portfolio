@@ -10,6 +10,7 @@ const ProjectList = ({ refresh, onEdit, onDelete }) => {
       .then((res) => setProjects(res.data))
       .catch((err) => console.error(err));
   }, [refresh]);
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
 
   return (
     <div className="flex flex-col mb-10">
@@ -51,7 +52,17 @@ const ProjectList = ({ refresh, onEdit, onDelete }) => {
                   {p.technologies.join(", ")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                  <img src={p.imageUrl} alt={p.title} className="w-16 h-16" />
+                  {p.media &&
+                  p.media.length > 0 &&
+                  p.media[0].type === "image" ? (
+                    <img
+                      src={`${p.media[0].url}`}
+                      alt={p.media[0].alt || p.title}
+                      className="w-16 h-16 object-cover rounded "
+                    />
+                  ) : (
+                    <span className="text-gray-400 italic">No image</span>
+                  )}
                 </td>
                 <td
                   className={`px-6 py-4 whitespace-nowrap text-sm ${

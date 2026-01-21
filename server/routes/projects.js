@@ -120,7 +120,7 @@ router.post('/upload', authenticateToken, upload.array('files', 10), (req, res) 
     const media = req.files.map(file => {
         const isVideo = file.mimetype.startsWith('video/');
         return {
-            url: `${baseUrl}/uploads/${file.filename}`,
+            url: `/uploads/${file.filename}`,
             type: isVideo ? 'video' : 'image',
             alt: ''
         };
@@ -128,21 +128,6 @@ router.post('/upload', authenticateToken, upload.array('files', 10), (req, res) 
 
     res.status(201).json({ media });
 });
-
-// Atualizar projeto
-// router.put('/:id', authenticateToken, async (req, res) => {
-//     try {
-//         const updatedProject = await Project.findByIdAndUpdate(
-//             req.params.id,
-//             req.body,
-//             { new: true }
-//         );
-//         res.json(updatedProject);
-//     } catch (error) {
-//         console.error('Error updating project:', error);
-//         res.status(500).json({ message: 'Error updating project' });
-//     }
-// });
 
 // Atualizar projeto
 router.put("/:id", authenticateToken, async (req, res) => {

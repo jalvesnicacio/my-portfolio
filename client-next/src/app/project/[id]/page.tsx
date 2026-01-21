@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { getProject } from "@/actions/projects";
+import { resolveMediaUrl } from "@/lib/media";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -17,15 +18,24 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         <p className="text-lg text-gray-600 mb-8">{project.summary}</p>
       )}
 
-      {project.imageUrl && (
+      {project.media?.length > 0 && (
         <div className="w-full h-auto rounded-xl overflow-hidden shadow mb-10">
-          <Image
-            src={project.imageUrl}
-            alt={project.title}
-            width={1200}
-            height={700}
-            className="w-full h-auto object-cover"
-          />
+          {project.media[0].type === "image" ? (
+            <Image
+              src={resolveMediaUrl(project.media[0].url)}
+              alt={project.media[0].alt || project.title}
+              width={1200}
+              height={700}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          ) : (
+            <video
+              src={project.media[0].url}
+              controls
+              className="w-full h-auto rounded-xl"
+            />
+          )}
         </div>
       )}
 

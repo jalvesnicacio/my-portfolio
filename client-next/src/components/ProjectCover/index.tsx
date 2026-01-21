@@ -1,3 +1,5 @@
+import { resolveMediaUrl } from "@/lib/media";
+
 type Media = {
   url: string;
   type: "image" | "video";
@@ -23,7 +25,7 @@ export function ProjectCover({ media, title }: Props) {
   if (coverMedia.type === "image") {
     return (
       <img
-        src={coverMedia.url}
+        src={resolveMediaUrl(coverMedia.url)}
         alt={coverMedia.alt || title}
         className="w-full h-full object-cover"
       />
@@ -32,7 +34,7 @@ export function ProjectCover({ media, title }: Props) {
 
   return (
     <video
-      src={coverMedia.url}
+      src={resolveMediaUrl(coverMedia.url)}
       className="w-full h-full object-cover"
       muted
       playsInline

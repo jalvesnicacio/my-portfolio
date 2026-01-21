@@ -1,18 +1,36 @@
+export interface Media {
+  url: string;
+  type: "image" | "video";
+  alt: string;
+}
+
 export interface Project {
   _id: string;
   title: string;
   summary: string;
   description: string;
   technologies: string[];
-  imageUrl: string;
+  media: Media[];
   projectUrl: string;
   publish: boolean;
 }
 
-// const baseApiUrl =
-//   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
+/**
+ * Resolve a URL base da API dependendo do ambiente:
+ * - Server (Node / Docker): usa hostname do docker-compose
+ * - Browser: usa localhost ou variável pública
+ */
+function getApiBaseUrl() {
+  const isServer = typeof window === "undefined";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001";
+  if (isServer) {
+    return process.env.API_INTERNAL_URL ?? "http://server:5001";
+  }
+
+  return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001";
+}
+
+const API_BASE = getApiBaseUrl();
 
 /**
  * Busca os projetos publicados na API.
@@ -37,13 +55,18 @@ export async function fetchPublishedProjects(): Promise<Project[]> {
 }
 
 export async function getProject(id: string) {
-  const res = await fetch(`${API_BASE}/api/projects/${id}`, {
-    cache: "no-store"
-  });
+  try {
+    const res = await fetch(`${API_BASE}/api/projects/${id}`, {
+      cache: "no-store"
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch project");
+    if (!res.ok) {
+      throw new Error("Failed to fetch project");
+    }
+
+    return res.json();
+  } catch (error) {
+    console.error("Erro ao buscar o projeto:", error);
+    throw error;
   }
-
-  return res.json();
 }

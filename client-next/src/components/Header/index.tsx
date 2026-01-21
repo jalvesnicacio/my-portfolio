@@ -14,7 +14,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import React from "react";
 
-const BaseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3001";
+const BaseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
 
 const navigationMenuItems = [
   { title: "Home", href: BaseUrl, icon: Home },

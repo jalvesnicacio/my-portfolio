@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Project, fetchPublishedProjects } from "@/actions/projects";
 import { useRouter } from "next/navigation";
+import { ProjectCover } from "../ProjectCover";
 
 export default function PortfolioSection() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -57,13 +58,9 @@ export default function PortfolioSection() {
             key={project._id}
             className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden max-w-md"
           >
-            {/* Imagem */}
-            <div className="w-full h-56 overflow-hidden">
-              <img
-                src={project.imageUrl}
-                alt={project.title}
-                className="w-full h-full object-cover"
-              />
+            {/* Media (cover only) */}
+            <div className="w-full h-56 overflow-hidden bg-gray-200">
+              <ProjectCover media={project.media} title={project.title} />
             </div>
 
             {/* Conteúdo */}
@@ -109,4 +106,3 @@ export default function PortfolioSection() {
     </section>
   );
 }
-

@@ -56,6 +56,7 @@ services:
     environment:
       - HOST=0.0.0.0
       - NEXT_PUBLIC_API_URL=http://localhost:5001
+      - API_INTERNAL_URL=http://server:5001
     restart: unless-stopped
 
 volumes:

@@ -1,5 +1,6 @@
 import api from "../services/api";
 import { useEffect, useState } from "react";
+import { resolveMediaUrl } from "../lib/resolveMediaUrl";
 
 const ProjectList = ({ refresh, onEdit, onDelete }) => {
   const [projects, setProjects] = useState([]);
@@ -45,7 +46,7 @@ const ProjectList = ({ refresh, onEdit, onDelete }) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {p.title}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                <td className="px-6 py-4 text-sm text-gray-600 max-w-xs truncate">
                   {p.summary}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -56,7 +57,7 @@ const ProjectList = ({ refresh, onEdit, onDelete }) => {
                   p.media.length > 0 &&
                   p.media[0].type === "image" ? (
                     <img
-                      src={`${p.media[0].url}`}
+                      src={resolveMediaUrl(p.media?.[0]?.url)}
                       alt={p.media[0].alt || p.title}
                       className="w-16 h-16 object-cover rounded "
                     />

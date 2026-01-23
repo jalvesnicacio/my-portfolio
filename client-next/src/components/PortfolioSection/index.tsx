@@ -75,7 +75,7 @@ export default function PortfolioSection() {
               </h4>
 
               <p className="text-gray-600 text-sm leading-relaxed">
-                {project._id} - {project.description}
+                {project.summary}
               </p>
 
               {/* Botão */}

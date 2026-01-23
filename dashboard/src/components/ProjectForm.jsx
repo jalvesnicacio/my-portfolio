@@ -4,6 +4,7 @@ import InputGroup from "./InputGroup";
 import MediaInput from "./MediaInput";
 import TextAreaGroup from "./TextAreaGroup";
 import CheckboxGroup from "./CheckboxGroup";
+import { resolveMediaUrl } from "../lib/resolveMediaUrl";
 
 const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
   const isEditing = !!selectedProject;
@@ -130,15 +131,15 @@ const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
     <div className="flex flex-wrap gap-4 mt-4">
       {mediaList.map((m, index) => (
         <div key={index} className="relative w-32">
-          {m.tipo === "video" ? (
+          {m.type === "video" ? (
             <video
-              src={m.url}
+              src={resolveMediaUrl(m.url)}
               controls
               className="w-32 h-24 object-cover rounded"
             />
           ) : (
             <img
-              src={m.url}
+              src={resolveMediaUrl(m.url)}
               alt={m.alt || ""}
               className="w-32 h-24 object-cover rounded"
             />

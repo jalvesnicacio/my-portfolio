@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { getProject } from "@/actions/projects";
 import { resolveMediaUrl } from "@/lib/media";
+import ProjectGallery from "@/components/ProjectGallery";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -58,6 +59,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
       )}
+
+      <ProjectGallery media={project.media} title={project.title} />
 
       {project.projectUrl && (
         <a

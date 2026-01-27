@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useEffect, useRef } from "react";
-import { useForm, ValidationError } from "@formspree/react";
+import { useForm } from "@formspree/react";
 
 export default function ContactSection() {
   const [state, handleSubmit] = useForm("xpwkwndw");
@@ -17,38 +17,6 @@ export default function ContactSection() {
     }
   }, [state.succeeded]);
 
-  //   if (state.succeeded) {
-  //     return (
-  //       <div className="p-6 bg-green-50 border border-green-200 rounded-xl text-center text-green-700">
-  //         <p className="text-lg font-medium">✅ Thank you for your message!</p>
-  //         <p>I’ll get back to you as soon as possible.</p>
-  //       </div>
-  //     );
-  //   }
-
-  //   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-  //     e.preventDefault();
-  //     setStatus("sending");
-  //     const form = e.currentTarget;
-  //     const data = new FormData(form);
-  //     try {
-  //       const res = await fetch("https://formspree.io/f/xpwkwndw", {
-  //         method: "POST",
-  //         body: data,
-  //         headers: {
-  //           Accept: "application/json"
-  //         }
-  //       });
-  //       if (res.ok) {
-  //         setStatus("success");
-  //         form.reset();
-  //       } else {
-  //         setStatus("error");
-  //       }
-  //     } catch {
-  //       setStatus("error");
-  //     }
-  //   }
 
   return (
     <section
@@ -58,7 +26,7 @@ export default function ContactSection() {
       {/* Coluna esquerda */}
       <div className="w-full md:w-1/2">
         <h2 className="text-lg md:text-2xl font-bold mb-2 text-gray-900">
-          Let's discuss your project
+          {"Let's discuss your project"}
         </h2>
         <h4 className="text-gray-500 text-base mb-6">
           There are many variations of passages of Lorem Ipsum available, but

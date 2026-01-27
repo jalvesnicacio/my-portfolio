@@ -1,51 +1,84 @@
 # =========================
 # CONFIG
 # =========================
-COMPOSE=docker compose
-SERVER_CONTAINER=api-portfolio
+COMPOSE_DEV=docker compose
+COMPOSE_PROD=docker compose -f docker-compose.prod.yml --env-file .env.prod
+
+DEV_SERVER_CONTAINER=api-portfolio
+PROD_SERVER_CONTAINER=portfolio-api
 
 # =========================
-# DOCKER
+# DEV — DOCKER
 # =========================
 up:
-	$(COMPOSE) up -d --build
+	$(COMPOSE_DEV) up -d --build
 
 down:
-	$(COMPOSE) down
+	$(COMPOSE_DEV) down
 
 restart:
-	$(COMPOSE) down
-	$(COMPOSE) up -d
+	$(COMPOSE_DEV) down
+	$(COMPOSE_DEV) up -d
 
 logs:
-	$(COMPOSE) logs -f
+	$(COMPOSE_DEV) logs -f
 
 ps:
-	$(COMPOSE) ps
+	$(COMPOSE_DEV) ps
 
 # =========================
-# SEED / DB
+# DEV — DB
 # =========================
 seed:
-	$(COMPOSE) exec server npm run seed
+	$(COMPOSE_DEV) exec server npm run seed
 
-# ⚠️ remove containers + volumes (DB!)
 reset:
-	$(COMPOSE) down -v
+	$(COMPOSE_DEV) down -v
 
 rebuild:
-	$(COMPOSE) down
-	$(COMPOSE) build --no-cache
-	$(COMPOSE) up -d
+	$(COMPOSE_DEV) down
+	$(COMPOSE_DEV) build --no-cache
+	$(COMPOSE_DEV) up -d
 
 # =========================
-# DEV SHORTCUTS
+# DEV — SHELLS
 # =========================
 server-shell:
-	$(COMPOSE) exec server sh
+	$(COMPOSE_DEV) exec server sh
 
 dashboard-shell:
-	$(COMPOSE) exec dashboard sh
+	$(COMPOSE_DEV) exec dashboard sh
 
 client-next-shell:
-	$(COMPOSE) exec client-next sh
+	$(COMPOSE_DEV) exec client-next sh
+
+# =========================
+# PROD — DOCKER
+# =========================
+prod-up:
+	$(COMPOSE_PROD) up -d
+
+prod-down:
+	$(COMPOSE_PROD) down
+
+prod-restart:
+	make prod-down
+	make prod-up
+
+prod-build:
+	$(COMPOSE_PROD) build
+
+prod-rebuild:
+	$(COMPOSE_PROD) build --no-cache
+
+prod-logs:
+	$(COMPOSE_PROD) logs -f
+
+prod-ps:
+	$(COMPOSE_PROD) ps
+
+# =========================
+# PROD — DB
+# =========================
+prod-seed:
+	$(COMPOSE_PROD) exec api npm run seed

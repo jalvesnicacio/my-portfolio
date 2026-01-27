@@ -1,0 +1,44 @@
+# ===============================
+# Base
+# ===============================
+FROM node:20-alpine AS base
+
+# Cria usuário não-root (segurança)
+RUN addgroup -S app && adduser -S app -G app
+
+WORKDIR /app
+
+# Copia apenas arquivos de dependência
+COPY package*.json ./
+
+# ===============================
+# Dependências
+# ===============================
+FROM base AS deps
+
+# Instala somente dependências de produção
+RUN npm ci --omit=dev
+
+# ===============================
+# Runtime (final)
+# ===============================
+FROM base AS runner
+
+ENV NODE_ENV=production
+
+# Copia node_modules já instalados
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copia o código da aplicação
+COPY . .
+
+# Garante existência da pasta de uploads
+RUN mkdir -p uploads && chown -R app:app /app
+
+USER app
+
+# Porta padrão da API
+EXPOSE 5001
+
+# Start da aplicação
+CMD ["node", "index.js"]

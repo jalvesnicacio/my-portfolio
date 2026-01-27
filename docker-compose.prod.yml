@@ -1,0 +1,77 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: portfolio-mongo
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - portfolio-net
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.prod
+    container_name: portfolio-api
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      NODE_ENV: production
+      PORT: ${API_PORT}
+      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongo:27017/${MONGO_DB}?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      BASE_URL: ${BASE_API_URL}
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      - mongo
+    networks:
+      - portfolio-net
+
+  dashboard:
+    build:
+      context: ./dashboard
+      dockerfile: Dockerfile.prod
+      args:
+        VITE_API_URL: https://portfolio-api.jalvesnicacio.com
+    container_name: portfolio-admin
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      NODE_ENV: production
+    networks:
+      - portfolio-net
+
+  client:
+    build:
+      context: ./client-next
+      dockerfile: Dockerfile.prod
+      args:
+        NEXT_PUBLIC_API_URL: https://portfolio-api.jalvesnicacio.com
+    container_name: portfolio-client
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      API_INTERNAL_URL: ${API_INTERNAL_URL}
+    networks:
+      - portfolio-net
+
+volumes:
+  mongo-data:
+  uploads:
+
+networks:
+  portfolio-net:
+    driver: bridge

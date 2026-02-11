@@ -30,7 +30,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       BASE_URL: ${BASE_API_URL}
     ports:
-      - "5005:5001"
+      - "127.0.0.1:5005:5001"
     volumes:
       - uploads:/app/uploads
     depends_on:
@@ -49,7 +49,7 @@ services:
     env_file:
       - .env.prod
     ports:
-      - "5175:80"
+      - "127.0.0.1:5175:80"
     environment:
       NODE_ENV: production
     networks:
@@ -70,7 +70,7 @@ services:
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
       API_INTERNAL_URL: ${API_INTERNAL_URL}
     ports:
-      - "3005:3000"
+      - "127.0.0.1:3005:3000"
     networks:
       - portfolio-net
 

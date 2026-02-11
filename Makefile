@@ -1,4 +1,10 @@
 # =========================
+# LOAD ENV
+# =========================
+include .env.prod
+export
+
+# =========================
 # CONFIG
 # =========================
 COMPOSE_DEV=docker compose
@@ -30,7 +36,7 @@ ps:
 # DEV — DB
 # =========================
 seed:
-	$(COMPOSE_DEV) exec server npm run seed
+	$(COMPOSE_DEV) exec api npm run seed
 
 reset:
 	$(COMPOSE_DEV) down -v
@@ -82,3 +88,6 @@ prod-ps:
 # =========================
 prod-seed:
 	$(COMPOSE_PROD) exec api npm run seed
+
+prod-mongo:
+	$(COMPOSE_PROD) exec mongo mongosh -u $(MONGO_USER) -p $(MONGO_PASSWORD) $(MONGO_DB)

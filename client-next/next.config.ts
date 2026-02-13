@@ -3,6 +3,12 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      // Produção
+      {
+        protocol: "https",
+        hostname: "portfolio-api.jalvesnicacio.com",
+        pathname: "/uploads/**"
+      },
       {
         protocol: "http",
         hostname: "localhost",

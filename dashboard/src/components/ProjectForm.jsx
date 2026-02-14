@@ -66,11 +66,12 @@ const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
       });
 
       try {
-        const uploadRes = await api.post("/api/projects/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        });
+        // const uploadRes = await api.post("/api/projects/upload", formData, {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data"
+        //   }
+        // });
+        const uploadRes = await api.post("/api/projects/upload", formData);
 
         // Espera-se que o backend retorne { media: [...] }
         const uploadedWithAlt = uploadRes.data.media.map((m, index) => ({
@@ -80,7 +81,7 @@ const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
         media = [...media, ...uploadedWithAlt];
       } catch (error) {
         console.error("Error uploading files:", error);
-        alert("Error uploading files");
+        alert("Error uploading files: " + error.message);
         return;
       }
     }

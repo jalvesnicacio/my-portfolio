@@ -81,7 +81,7 @@ const ProjectForm = ({ onProjectAdded, selectedProject, onCancelEdit }) => {
         media = [...media, ...uploadedWithAlt];
       } catch (error) {
         console.error("Error uploading files:", error);
-        alert("Error uploading files: " + error.message);
+        alert("Error uploading files: " + error);
         return;
       }
     }

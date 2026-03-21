@@ -14,12 +14,12 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
 import React from "react";
 
-const BaseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
+const BaseUrl = process.env.NEXT_PUBLIC_URL || "";
 
 const navigationMenuItems = [
-  { title: "Home", href: BaseUrl, icon: Home },
-  { title: "About", href: `${BaseUrl}/#about`, icon: Info },
-  { title: "Portfolio", href: `${BaseUrl}/#portfolio`, icon: Briefcase }
+  { title: "Home", href: "/", icon: Home },
+  { title: "About", href: "/#about", icon: Info },
+  { title: "Portfolio", href: "/#portfolio", icon: Briefcase }
 ];
 
 export default function Header() {

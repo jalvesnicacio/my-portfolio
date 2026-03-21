@@ -36,13 +36,20 @@ export default function AboutSection() {
           </p>
           <div className="flex items-center">
             <Button asChild>
-              <a href="#portfolio">
+              <a
+                href="https://github.com/jalvesnicacio"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FolderGit2 />
                 My Projects
               </a>
             </Button>
             <Button asChild variant="outline" className="ml-4">
-              <a href="#contact">
+              <a
+                href="Jalves_Nicacio_CV_en.pdf"
+                download="Jalves_Nicacio_CV.pdf"
+              >
                 <Download />
                 Download CV
               </a>
